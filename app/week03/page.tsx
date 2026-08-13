@@ -13,7 +13,7 @@ export default function ToDoList() {
     const isActive = (act: boolean) => {
         if(act)
             return <span style={{ color: "green"}}>กำลังศึกษาอยู่</span>;
-        return <span style={{ color: "red"}}>ไม่ได้เป็นนักศึกษาแล้วนะ</span>;
+        return <span style={{ color: "red"}}>ไม่ได้เป็นนักศึกษาแล้ว</span>;
     }
 
     const tmpTdl = toDoList.map(item =>
@@ -22,7 +22,6 @@ export default function ToDoList() {
     <p className="mt-2 text-sm text-white">{item.desc}</p>
     <p className="mt-2 text-sm text-white">{item.data_added}</p>
     <p className="mt-2 text-sm text-white">{item.author}</p>
-    <p className="mt-2 text-sm text-white">{isActive(item.status)}</p>
     </div>
     )
     // const isActive = (act: boolean) => (act) ? "กำลังศึกษาอยู่" : "ไม่ได้เป็นนักศึกษาแล้วนะ";
