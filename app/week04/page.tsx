@@ -4,6 +4,8 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import { dataItem, appendItem } from "../data/dataItem";
 import { useState } from "react";
+import ToDoForm from "./components/ToDoForm";
+import Modal from "./components/Modal";
 
 export default function ToDoList() {
 
@@ -11,6 +13,8 @@ export default function ToDoList() {
     const [tasks, setTasks] = useState(toDoList);
     const [numOfTasks, setNoft] = useState(tasks.length);
     const [status, setStatus] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     const filteredTasks = 
         status == null ? tasks
@@ -30,6 +34,14 @@ export default function ToDoList() {
         return <span style={{ color: "red"}}>ไม่ได้เป็นนักศึกษาแล้ว</span>;
     }
 
+    const onEdit = (t) => {
+        alert(`งานที่คุณต้องการแก้ไข ${t}`);
+    }
+
+    const onDelete = (id) => {
+        alert(`คุณต้องการลบข้อมูล รหัสงาน ${id}?`);
+    }
+
     const tmpTdl = filteredTasks.map((item, index) => {
         const {id, title, desc, data_added, author, status} = item;
         return (<div className="w-full max-w-sm p-6 bg-purple-300 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200" key={index}>
@@ -37,17 +49,30 @@ export default function ToDoList() {
             <p className="mt-2 text-sm text-white">{desc}</p>
             <p className="mt-2 text-sm text-white">{author} / {data_added}</p>
             <p className="mt-2 text-sm text-white">{status}</p>
+
+            <div className="flex gap-2 mt-2">
+                {/* View */}
+                <button onClick={(e) => {setSelectedTask(item);setOpen(true);}} className="bg-green-500 text-white px-3 py-1 rounded">View</button>
+                {/*<button onClick={(e)=>setOpen(true)} className="bg-green-500 text-white px-3 py-1 rounded">View</button>*/}
+
+                {/* Edit */}
+                <button onClick={(e)=>onEdit(item)} className="bg-orange-500 text-white px-3 py-1 rounded">Edit</button>
+
+                {/* Delete */}
+                <button onClick={(e)=>onDelete(id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+            </div>
         </div>);
+    
     });
 
-    const addTask = () => {
+    const addTask = (title, status) => {
         const newTask = {
         id: tasks.length+1,
-        title: "ทดสอบเพิ่มงาน",
+        title: title,
         desc: "รายละเอียดของงานที่เพิ่ม",
-        data_added: "13/08/2569",
-        author: "นายทดสอบ ระบบ",
-        status: true
+        data_added: "17/08/2569",
+        author: "Kawisara",
+        status: status
         };
 
         setTasks([...tasks, newTask]);
@@ -73,15 +98,17 @@ export default function ToDoList() {
             </div>
         </div>
 
+        <ToDoForm addTask={addTask} />
+
         <div className=" bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 border border-gray-300 rounded-lg p-4">
             <div className="text-white bg-pink-300 border border-default hover:bg-neutral-secondary-medium 
                     hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium 
                     leading-5 rounded-full text-sm px-4 py-2 focus:outline-none">งานที่ต้องทำ {numOfTasks} รายการ</div>
-            <div>
+            {/*<div>
                 <button type="button" className="text-white bg-indigo-300 border border-default hover:bg-neutral-secondary-medium 
                     hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium 
                     leading-5 rounded-full text-sm px-4 py-2 focus:outline-none" onClick={addTask}>เพิ่มงาน</button>
-            </div>
+            </div>*/}
 
             <div className="inline-flex gap-2" role="group">
                 <button type="button" className="text-white bg-blue-600 border border-default hover:bg-neutral-secondary-medium 
@@ -99,6 +126,17 @@ export default function ToDoList() {
             <div className="flex justify-center gap-3 space-y-3 flex justify-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {tmpTdl}
             </div>
+
+                            <Modal open={open} onClose={()=>setOpen(false)}>
+                { selectedTask && (
+                    <div>
+                        <h2 className="text-xl font-bold text-blue-700">{selectedTask.title}</h2>
+                        <p className="mt-2 text-sm text-blue-700">{selectedTask.desc}</p>
+                        <p className="mt-2 text-sm text-blue-700">{selectedTask.author} / {selectedTask.data_added}</p>
+                        <p className="mt-2 text-sm text-blue-700">{selectedTask.status ? "Completed": "Pending"}</p>
+                    </div>
+                )}
+            </Modal>
 
             <Footer />
       </>
