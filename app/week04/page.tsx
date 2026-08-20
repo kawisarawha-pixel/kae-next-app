@@ -15,6 +15,9 @@ export default function ToDoList() {
     const [status, setStatus] = useState(null);
     const [open, setOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
+    const [editingTask, setEditingTask] = useState(null);
+
+    const resetEditTask = () => setEditingTask(null);
 
     const filteredTasks = 
         status == null ? tasks
@@ -34,12 +37,36 @@ export default function ToDoList() {
         return <span style={{ color: "red"}}>ไม่ได้เป็นนักศึกษาแล้ว</span>;
     }
 
-    const onEdit = (t) => {
-        alert(`งานที่คุณต้องการแก้ไข ${t}`);
+    const Status = (status: boolean) => {
+        if(status)
+            return <span style={{ color: "green" }}>เสร็จสิ้น</span>
+        return <span style={{ color: "red"}}>กำลังดำเนินการ</span>
     }
 
+    const onEdit = (t) => {
+        //alert(`งานที่คุณต้องการแก้ไข ${t}`);
+        setEditingTask(t);
+    }
+
+        const updateTask = (id, title, status) => {
+            setTasks(
+                tasks => tasks.map(
+                    t => t.id === id ?
+                    {
+                        ...t,
+                        title: title,
+                        status: status
+                    } : t
+                ));
+                setEditingTask(null);
+        }
+
     const onDelete = (id) => {
-        alert(`คุณต้องการลบข้อมูล รหัสงาน ${id}?`);
+        //alert(`คุณต้องการลบข้อมูล รหัสงาน ${id}?`);
+        const updateTasks = tasks.filter(
+            item => item.id != id
+        );
+        setTasks(updateTasks);
     }
 
     const tmpTdl = filteredTasks.map((item, index) => {
@@ -48,7 +75,7 @@ export default function ToDoList() {
             <h3 className="text-lg font-semibold text-pink-400">{title}</h3>
             <p className="mt-2 text-sm text-white">{desc}</p>
             <p className="mt-2 text-sm text-white">{author} / {data_added}</p>
-            <p className="mt-2 text-sm text-white">{status}</p>
+            <p className="mt-2 text-sm text-white">{Status(status)}</p>
 
             <div className="flex gap-2 mt-2">
                 {/* View */}
@@ -98,7 +125,12 @@ export default function ToDoList() {
             </div>
         </div>
 
-        <ToDoForm addTask={addTask} />
+        <ToDoForm 
+            addTask={addTask}
+            editingTask={editingTask}
+            updateTask={updateTask}
+            resetEditingTask={setEditingTask}
+        />
 
         <div className=" bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 border border-gray-300 rounded-lg p-4">
             <div className="text-white bg-pink-300 border border-default hover:bg-neutral-secondary-medium 

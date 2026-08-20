@@ -16,6 +16,12 @@ export default function ToDoList() {
         return <span style={{ color: "red"}}>ไม่ได้เป็นนักศึกษาแล้ว</span>;
     }
 
+    const Status = (status: boolean) => {
+        if(status)
+            return <span style={{ color: "green" }}>เสร็จสิ้น</span>
+        return <span style={{ color: "red"}}>กำลังดำเนินการ</span>
+    }
+
     const tmpTdl = toDoList.map(item =>
         <div className="w-full max-w-sm p-6 bg-purple-300 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200">
     <h3 className="text-lg font-semibold text-pink-400">{item.title}</h3>
