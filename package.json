@@ -2,13 +2,17 @@
   "name": "kae-next-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "api": "node ./server/kaeApi.js"
   },
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4"
