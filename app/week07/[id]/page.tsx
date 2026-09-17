@@ -1,36 +1,22 @@
-'use client';
-
 import Link from "next/link";
-import { shops } from "../components/shopItem";
+// import { shops } from "../components/shopItem";
 import Loading from "../components/Loading";
 import { Suspense } from "react";
-import { useEffect, useState } from "react";
 
 export default async function ShopDetail({ params }) {
     const { id } = await params;
 
-    // const shop = shops.find(
-    //     item => item.id === Number(id)
-    // );
-
-    const [shop, setShop] = useState({});
-
-    useEffect(() => {
-        const fetchData = async() => {
-            try {
-                const resData = await fetch(`http://localhost:8009/${id}`);
-                if(resData.ok){
-                    const resShop = await resData.json();
-                    setShop(resShop);
-                } else {
-                    throw new Error(`Network response was not ok.`);
-                }
-            } catch(error) {
-                console.log(`Error fetching data: ${error}`);
-            }
+    let shops = {};
+    try {
+        const resData = await fetch(`http://localhost:8009/shops/${id}`);
+        if(!resData.ok){
+            throw new Error(`Network response was not ok.`);
         }
-        fetchData();
-    },[shop]);
+        shops = await resData.json();
+        console.log(`Detail:${shops}`);
+        } catch(error) {
+            console.log(`Error fetching data: ${error}`);
+        }
 
     const Status = (status: boolean) => {
         if(status)
@@ -46,15 +32,21 @@ export default async function ShopDetail({ params }) {
                     Shop Detail
                     </h1>
 
-                <div key={shop.shopId} className="border rounded-lg p-4 m-4">
+                <div key={shops.shopId} className="border rounded-lg p-4 m-4">
                     <p className="mt-4 font-semibold">
-                        ID: {shop.shopId}
+                        ID: {shops.shopId}
                     </p>
                     <p className="my-4">
-                        Name: {shop.shopName}
+                        Name: {shops.shopName}
                     </p>
                     <p className="my-4">
-                        Open Status: {Status(shop.shopStatus)}
+                        Type: {shops.shopType}
+                    </p>
+                    <p className="my-4">
+                        Loc: {shops.shopLoc.lat}, {shops.shopLoc.lon}
+                    </p>
+                    <p className="my-4">
+                        Open Status: {Status(shops.shopStatus)}
                     </p>
                 </div>
 
@@ -62,8 +54,29 @@ export default async function ShopDetail({ params }) {
             Back
             </Link>
 
+
     </div>
             </Suspense>
         </>
     );
 }
+    // const shop = shops.find(
+    //     item => item.id === Number(id)
+    // );
+    // const [shop, setShop] = useState({});
+    // useEffect(() => {
+    //     const fetchData = async() => {
+    //         try {
+    //             const resData = await fetch(`http://localhost:8009/${id}`);
+    //             if(resData.ok){
+    //                 const resShop = await resData.json();
+    //                 setShop(resShop);
+    //             } else {
+    //                 throw new Error(`Network response was not ok.`);
+    //             }
+    //         } catch(error) {
+    //             console.log(`Error fetching data: ${error}`);
+    //         }
+    //     }
+    //     fetchData();
+    // },[shop]);

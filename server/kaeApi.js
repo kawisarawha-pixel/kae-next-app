@@ -1,8 +1,15 @@
 import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 8009;
 
+// Enable CORS for all routes
+app.use(cors());
+app.use(bodyParser.json());
+
+// Object array
 const myShops = [
     {
     shopId: 100,
@@ -28,7 +35,7 @@ const myShops = [
 
 ];
 
-// http://localhost:8009/
+// http://localhost:8009/api/shops/:id
 app.get('/', (req, res) => {
     res.send('<h1>Web Programming in 2/2569.</h1>');
 });
@@ -53,16 +60,16 @@ app.get('/shops{/:shopId}', (req, res) => {
     //         <b>Shop Location (lat, lon):</b> 
     //         ${myShops.shopLoc.lat}, ${myShops.shopLoc.lon}<br/>`
     //     }); 
-    let myText = '';
-    myText+= '<h1>Shop information:</h1><hr/>';
-    myText+= `<b>Shop ID:</b> ${myShops.shopId}<br/>`;
-    myText+= `<b>Shop Name:</b> ${myShops.shopName}<br/>`;
-    myText+= `<b>Shop Type:</b> ${myShops.shopType}<br/>`;
-    myText+= `<b>Shop Location (lat, lon):</b> ${myShops.shopLoc.lat}, ${myShops.shopLoc.lon}<br/>`;
-    myText+= `<b>Shop Status:</b> ${myShops.shopStatus}<br/>`;
+    // let myText = '';
+    // myText+= '<h1>Shop information:</h1><hr/>';
+    // myText+= `<b>Shop ID:</b> ${myShops.shopId}<br/>`;
+    // myText+= `<b>Shop Name:</b> ${myShops.shopName}<br/>`;
+    // myText+= `<b>Shop Type:</b> ${myShops.shopType}<br/>`;
+    // myText+= `<b>Shop Location (lat, lon):</b> ${myShops.shopLoc.lat}, ${myShops.shopLoc.lon}<br/>`;
+    // myText+= `<b>Shop Status:</b> ${myShops.shopStatus}<br/>`;
 
-    res.set('Content-type', 'text/html');
-    res.send(myText);
+    // res.set('Content-type', 'text/html');
+    // res.send(myText);
 });
 
 app.listen(port, () => {

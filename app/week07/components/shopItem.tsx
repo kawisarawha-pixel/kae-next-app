@@ -4,7 +4,7 @@ export const shops =[
         id: 1,
         title: "Adidas",
         location: { lat: 100, long: 100 },
-        openStatus: false
+        openStatus: true
     },
     {
         id: 2,
