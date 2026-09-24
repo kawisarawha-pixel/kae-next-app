@@ -1,4 +1,5 @@
 import express from 'express';
+import db from './config/firebase.js';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
@@ -38,6 +39,56 @@ const myShops = [
 // http://localhost:8009/api/shops/:id
 app.get('/', (req, res) => {
     res.send('<h1>Web Programming in 2/2569.</h1>');
+});
+
+// Route สำหรับการ Read ข้อมูลจากฐานข้อมูลด้วย id
+// GET : http://localhos:8009/api/shops/100
+app.get('/api/shops/:id', async (req, res) => { 
+
+try {
+      const doc = await db
+          .collection("shops_10071")
+          .doc(req.params.id)
+          .get();
+
+      res.json(
+        {
+          id: doc.id,
+          ...doc.data()
+        }
+      );
+    } catch (error) {
+      res.status(500).json(
+        {
+          message: "FAILED: การอ่านข้อมูล shops ด้วยรหัสร้านค้า (shopId) มีปัญหา กรุณาตรวจสอบ",
+          error: error.message
+        }
+      );
+    }});
+
+// GET: http://localhost:8009/api/shops
+app.get('/api/shops', async(req,res) => {
+    try {
+    // คำสั่ง: สำหรับการอ่านหรือดึงข้อมูลจาก Documents ที่จัดเก็บภายใน Collection
+    const snapshot = await db
+    .collection("shops_10071")
+    .orderBy("shopName", "desc")
+    .get();
+
+    const shops =  snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+    }));
+
+      res.json(shops);
+    } catch (error) {
+        res.statusCode(500).json(
+            {
+                message: "FAILED: การอ่านข้อมูล shops มีปัญหากรุณาตรวจสอบ",
+                error: error.message
+            }
+        )
+    }
 });
 
 app.get('/shops{/:shopId}', (req, res) => {

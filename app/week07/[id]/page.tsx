@@ -8,7 +8,7 @@ export default async function ShopDetail({ params }) {
 
     let shops = {};
     try {
-        const resData = await fetch(`http://localhost:8009/shops/${id}`);
+        const resData = await fetch(`http://localhost:8009/api/shops/${id}`);
         if(!resData.ok){
             throw new Error(`Network response was not ok.`);
         }
@@ -43,15 +43,15 @@ export default async function ShopDetail({ params }) {
                         Type: {shops.shopType}
                     </p>
                     <p className="my-4">
-                        Loc: {shops.shopLoc.lat}, {shops.shopLoc.lon}
+                        Loc: {shops.shopLoc?.lat}, {shops.shopLoc?.lon}
                     </p>
                     <p className="my-4">
                         Open Status: {Status(shops.shopStatus)}
                     </p>
                 </div>
 
-            <Link href="/week07" className="bg-gray-600 text-white px-4 py-2 rounded">
-            Back
+            <Link href="/week07" className="bg-gray- text-white px-4 py-2 rounded">
+            Back600
             </Link>
 
 
