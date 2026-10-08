@@ -50,9 +50,8 @@ export default async function ShopDetail({ params }) {
                     </p>
                 </div>
 
-            <Link href="/week07" className="bg-gray- text-white px-4 py-2 rounded">
-            Back600
-            </Link>
+            <Link href="/week07" className="bg-gray-600 text-white px-4 py-2 rounded"
+            >Back</Link>
 
 
     </div>

@@ -123,6 +123,142 @@ app.get('/shops{/:shopId}', (req, res) => {
     // res.send(myText);
 });
 
+// การลบข้อมูลร้านค้าจากไฟร์เบสด้วย id (Method: DELETE)
+const deleteShop = async (req, res) => {
+    const ShopRef = db
+      .collection("shops_10071")
+      .doc(req.params.id);
+ 
+    await ShopRef.delete();
+ 
+    res.status(200).json({
+      message: "Shop deleted successfully",
+      id: req.params.id,
+    });
+}
+ 
+// App route: /api/shops/:id (Method: DELETE)
+// Endpoint: http://localhost:8009/api/shops/100
+app.delete('/api/shops/:id', (req, res) => {
+  try {
+    deleteShop(req, res);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to deleting shop.",
+      error: error.message,
+    });
+  }
+});
+
+// การสร้างข้อมูลร้านค้าในไฟร์เบส (Method: POST)
+const createShop = async (req, res) => {
+    const {
+      shopName,
+      shopType,
+      shopStatus,
+    } = req.body;
+ 
+    if (!shopName || !shopType || !shopStatus) {
+      return res.status(400).json({
+          message: "Name, type and status are required",
+      });
+    }
+ 
+    const shopRef = await db.collection("shops_10071").doc();
+    const newId = shopRef.id; // Access the generated ID
+ 
+    const newShop = {
+      shopId: newId,
+      shopName,
+      shopType,
+      shopStatus: shopStatus === 'true',
+    };
+ 
+    // Builder query: Add
+    const docRef = await db
+      .collection("shops_10071")
+      .add(newShop);
+ 
+    res.status(201).json({
+      id: docRef.id,
+      ...newShop,
+    });
+}
+ 
+// App route: /api/shops (Method: POST)
+// Endpoint: http://localhost:xxxx/api/shops
+app.post('/api/shops', (req, res) => {
+  try {
+    createShop(req, res);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to adding shop.",
+      error: error.message,
+    });
+  }
+});
+
+// การแก้ไขข้อมูลร้านค้าในไฟร์เบส (Method: PUT)
+const updateShop = async (req, res) => {
+
+  try {
+
+    const ShopRef = db
+      .collection("shops_10071")
+      .doc(req.params.id);
+
+    const doc = await ShopRef.get();
+
+    if (!doc.exists) {
+
+      return res.status(404).json({
+        message: "Shop not found",
+      });
+
+    }
+
+    const {
+      shopName,
+      shopType,
+      shopStatus,
+    } = req.body;
+
+    const updateData = {
+      shopName,
+      shopType,
+      shopStatus: shopStatus === 'true',
+    };
+
+    await ShopRef.update(updateData);
+
+    res.status(200).json({
+      id: req.params.id,
+      ...updateData,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Failed to update Shop",
+    });
+
+  }
+
+};
+
+// App route: /api/shops (Method: PUT)
+// Endpoint: http://localhost:8009/api/shops
+app.put('/api/shops/:id', (req, res) => {
+  try {
+    updateShop(req, res);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to updating shop.",
+      error: error.message,
+    });
+  }
+});
+
 app.listen(port, () => {
     console.log(`App listening on port ${port}...`);
 });
