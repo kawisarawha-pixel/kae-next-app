@@ -2,11 +2,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+////////////////////////////////////////////////
+import UserProfile from "../components/UserProfile";
+import LogoutButton from "../components/logout";
+import LoginButton from "../components/login";
 
 export default function ShopList({ data }) {
 
     // const router = useRouter();
     const [keyword, setKeyword] = useState("");
+
+    let storedUser = "";
+    if (typeof window !== 'undefined') {
+        storedUser = localStorage.getItem("user");
+    }
 
     const filterShops = data.filter(
         (item) => {
@@ -53,7 +62,12 @@ export default function ShopList({ data }) {
     return (
 
         <div className="max-w-3xl ma-auto p-6">
-
+            <UserProfile />
+            <br></br>
+            {storedUser ? <LogoutButton /> : <LoginButton />}
+            <br></br>
+            <br></br>
+            
             {/* Search */}
             <div className="mb-6">
 
@@ -63,7 +77,6 @@ export default function ShopList({ data }) {
                 onChange={(e) =>
                 setKeyword(e.target.value)
             }
-            
           placeholder="Search shop..." className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
       </div>
 
