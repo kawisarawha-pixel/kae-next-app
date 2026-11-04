@@ -5,9 +5,9 @@ import ShopList from "./components/ShopList";
 
 export default async function ShopPage() {
 
-    let shops = {};
+    let shops = [];
     try {
-        const resData = await fetch(`http://localhost:8009/shops/`);
+        const resData = await fetch(`http://localhost:8009/api/shops/`);
         if(!resData.ok){
             throw new Error(`Network response was not ok.`);
         }
@@ -15,7 +15,6 @@ export default async function ShopPage() {
         console.log(shops);
         } catch(error) {
             console.log(`Error fetching data: ${error}`);
-            throw new Error(`Error fetching data: ${error}`);
         }
 
     return (

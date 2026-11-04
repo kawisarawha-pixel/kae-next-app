@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Firebase / Google Cloud credentials
+server/config/firebase-config-10071.json
+server/config/*.json
