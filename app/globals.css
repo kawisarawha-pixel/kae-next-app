@@ -1,6 +1,7 @@
 @import "tailwindcss";
-
-:root {
+@source "../app";
+@source "../components";
+Remove-Item -Recurse -Force .next :root {
   --background: #ffffff;
   --foreground: #171717;
 }
